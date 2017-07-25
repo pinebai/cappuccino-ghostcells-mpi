@@ -1,0 +1,39 @@
+!===========================================================================================================
+List of turbulence models:
+!===========================================================================================================
+
+1. Standard k-epsilon (STDKEPS=True and LEVM=True)
+2. k-epsilon + Durbin timescale limiter (Durbin=True and LEVM=True)
+3. RNG k-epsilon (RNG=True and LEVM=True)
+4. Shih et.al. realizable k-epsilon (REALIZABLE=True and LEVM=True)
+5. Lam-Bremhorst low-re modification of k-epsilon (LowRe_LB=True and LEVM=True)
+6. Wilcox k-omega (Wilcox=True and LEVM=True)
+7. Low-Re version of Wilcox k-omega (Wilcox=True and LowRe=True and LEVM=True)
+8. k-omega SST by Menter (SST=True and LEVM=True)
+9. Low-Re version of k-omega SST by Menter (SST=True and LowRe=True and LEVM=True)
+10. Scale-Adaptive Simulation (SAS) SST k-omega model (SAS=True and LEVM=True) (Hybrid RANS/LES!)
+11. Scale-Adaptive Simulation (SAS) based on low-re SST k-omega model (SAS=True and LowRe=True and LEVM=True) (Hybrid RANS/LES!)
+12. Hybrid seamless-alpha model based on standard k-epsilon (STDKEPS=True and ALPHAMODEL=True and LEVM=True) (Hybrid RANS/LES!)
+13. EARSM of Wallin and Johansson based on k-omega (EARSM_WJ=True and LASM=True and LEVM=False)
+14. Menter's version of EARSM of Wallin and Johansson based on k-omega (EARSM_M=True and LASM=True and LEVM=False)
+15. Scale-Adaptive Simulation (SAS) based on EARSM of Wallin and Johansson based on k-omega (EARSM_WJ=True and SAS=True and LASM=True and LEVM=False) (NEW!!!) (Hybrid RANS/LES!)
+16. Scale-Adaptive Simulation (SAS) based on  Menter's version of EARSM of Wallin and Johansson based on k-omega (EARSM_M=True and SAS=True and LASM=True and LEVM=False) (NEW!!!) (Hybrid RANS/LES!)
+17. Hybrid seamless-alpha model based on EARSM of Wallin and Johansson based on k-omega (EARSM_WJ=True and ALPHAMODEL=True and LASM=True and LEVM=False) (NEW!!!) (Hybrid RANS/LES!)
+18. Hybrid seamless-alpha model based on Menter's version of EARSM of Wallin and Johansson based on k-omega (EARSM_M=True and ALPHAMODEL=True and LASM=True and LEVM=False) (NEW!!!) (Hybrid RANS/LES!)
+
+Note: the last six EARSM model version can also go with Low-Re version!
+
+!===========================================================================================================
+For non-stationary runs:
+!===========================================================================================================
+1. Open two text files:
+"transient_monitoring_points" with i j kcoordinates of monitoring points, and
+"transient_monitoring_points_names" with simbolic names of monitoring points e.g. 'ht' for hill top, etc.
+2. In macro-film.mcr set pointers to current folder and desired Tecplot .lay to generate screenshot for animation
+3. In input file set
+LTRANSIENT to True
+NUMSTEP to number of timesteps
+TIMESTEP to timestep size (e.g. 1e-3)
+NZAPIS to value of timesteps when we write output files and generate screenshot for animation
+MIT(1) to value of no. of inner iterations (e.g. 30), residuals should drop 2 orders of magnitude within timestep
+
