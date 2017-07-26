@@ -300,43 +300,4 @@ if (myid == 0) then
   write(66,*)' '
 endif
 
-
-! ! MPI test 
-! if (myid == 1) then
-!   ! Create an input file reading log:
-!   write(*,'(a)') ' input file log: '
-!   write(*,'(a)') '--------------------------------------------------------------------------------'
-!   write(*,'(a70)') title
-!   write(*,'(3(l1,1x),5x,a)') lread,lwrite,ltest,'read3,writ3,ltest'
-!   write(*,'(5(l1,1x),5x,a)') louts,loute,lpri,lprj,lprk,'louts,loute,lpri,lprj,lprk'
-!   write(*,'(10(l1,1x),5x,a)') (lcal(i),i=1,nphi),'(ical(i),i=1,nphi),ien=7!!!,ivis=8,ivart=9;icon=10!'
-!   write(*,'(7(i3,1x),5x,a)') imon,jmon,kmon,ipr,jpr,kpr,mpoints,'imon,jmon,kmon,ipr,jpr,kpr,mpoints'
-!   write(*,'(2(es11.4,1x),5x,a)') slarge,sormax,'slarge,sormax'
-!   write(*,'(3(es11.4,1x),a)') densit,viscos,dis,'densit,viscos,dis'
-!   write(*,'(3(es11.4,1x),a)') pranl,tref,beta,'pranl,tref,beta'
-!   write(*,'(l1,1x,3f5.2,1x,l1,1x,a)') lbuoy,gravx,gravy,gravz,boussinesq,'lbuoy,gravx,gravy,gravz,boussinesq'
-!   write(*,'(l1,1x,f5.2,1x,es11.4,1x,a)') roughwall,erough,zzero,'roughwall,erough,zzero'
-!   write(*,'(6(f4.2,1x),a)') phit,sksi,eta,rcost,facnap,facflx,'phit,sksi,eta,rcost,facnap,facflx'
-!   write(*,'(l1,1x,f4.2,1x,a)') ltransient,btime,'ltransient,btime'
-!   write(*,'(4(l1,1x),a)') levm,lasm,lles,ldes,'levm,lasm,lles,ldes'
-!   write(*,'(3(l1,1x),a)') lsgdh,lggdh,lafm,'lsgdh,lggdh,lafm'
-!   write(*,'((i2,1x),a)') iturbmodel,'iturbmodel'
-!   write(*,'(8(es11.4,1x),a)') uin,vin,win,tein,edin,tin,vartin,conin,'uin,vin,win,tein,edin,tin,vartin,conin'
-!   write(*,'((i2,1x),a)') iconvective_scheme,'iconvective_scheme'
-!   write(*,'(10(f4.2,1x),a)') (gds(i),i=1,nphi),'(gds(i),i=1,nphi), muscl velocity, cds other'
-!   write(*,'(10(f4.2,1x),a)') (urf(i),i=1,nphi),'(urf(i),i=1,nphi)'
-!   write(*,'(10(es9.2,1x),a)') (sor(i),i=1,nphi),'(sor(i),i=1,nphi)'
-!   write(*,'(10(i3,1x),a)') (nsw(i),i=1,nphi),'(nsw(i),i=1,nphi)'
-!   write(*,'(i6,1x,es9.2,1x,i5,1x,i4,1x,a)') numstep,timestep,nzapis,maxit,'numstep,timestep,nzapis,maxit'
-!   write(*,'(l1,1x,l1,1x,a)') gauss, lstsq,'gauss, lstsq'
-!   write(*,'(i1,1x,i1,1x,a)') npcor, nigrad,'npcor, nigrad'
-!   write(*,'(2(l1,1x),1x,a)') bdf,cn,'bdf,cn'
-!   write(*,'(3(l1,1x),i1,1x,a)') simple,piso,pimple,ncorr,'simple,piso,pimple,ncorr'
-!   write(*,'(2(l1,1x),es11.4,5x,a)') periodic_boundary,const_mflux,gradpcmf,'periodic_boundary, const_mflux, gradpcmf'
-!   write(*,'(l1,es11.4,5x,a)') conumfix, conumfixvalue,'conumfix, conumfixvalue'
-!   write(*,'(a)') '--------------------------------------------------------------------------------'
-!   write(*,'(a)') ' '
-! endif
-
-
 end subroutine read_input

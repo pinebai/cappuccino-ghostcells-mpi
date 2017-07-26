@@ -20,6 +20,7 @@ LINEAR_SOLVER_FILES=\
 
 F90FILES=\
       modules_allocatable.f90 \
+      utils.f90 \
       fieldManipulation.f90 \
       set_parameters.f90 \
       allocate.f90 \
@@ -47,8 +48,8 @@ F90FILES=\
       find_intersection_point.f90 \
       fluxmc.f90 \
       intfac.f90 \
+      init.f90 \
       matrix.f90 \
-      modinp.f90 \
       modvis.f90 \
       print_header.f90 \
       report_wall_stresses.f90 \
@@ -67,8 +68,6 @@ F90FILES=\
       read_grid.f90 \
       random_seed.f90 \
       setind.f90 \
-      setcon.f90 \
-      show_logo.f90 \
       update_values_at_ghostcells_nonperiodic.f90 \
       writefiles.f90 \
       writehistory.f90 \

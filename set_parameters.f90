@@ -1,50 +1,54 @@
 !***********************************************************************
 !
-      SUBROUTINE SET_PARAMETERS
+subroutine set_parameters
 !
 !***********************************************************************
 !
-!     NEEDED TO ALLOCATE ARRAYS
+!  Needed to allocate arrays, most of this is because of the old
+!  multigrid code.   
 !
 !***********************************************************************
 !
-      USE PARAMETERS
-      USE INDEXES
+  use parameters
+  use indexes
 
-      IMPLICIT NONE
+  implicit none
+
+  integer, parameter :: ngit = 1
 !
 !***********************************************************************
 !
-      NICV = NI-2 
-      NJCV = NJ-2 
-      NKCV = NK-2 
 
-      NXYO=NXO*NYO
-      NXZO=NXO*NZO
-      NYZO=NYO*NZO
+  nicv = ni-2
+  njcv = nj-2 
+  nkcv = nk-2 
 
-      NX=NICV*2**(NGIT-1)+2
-      NY=NJCV*2**(NGIT-1)+2
-      NZ=NKCV*2**(NGIT-1)+2
+  nxyo=nxo*nyo
+  nxzo=nxo*nzo
+  nyzo=nyo*nzo
 
-      NXY=NX*NY
-      NXZ=NX*NZ
-      NYZ=NY*NZ
-      NXYZ=NXY*NZ
+  nx=nicv*2**(ngit-1)+2
+  ny=njcv*2**(ngit-1)+2
+  nz=nkcv*2**(ngit-1)+2
 
-      NXA=NICV*(2**NGIT-1)+2*NGIT
-      NYA=NJCV*(2**NGIT-1)+2*NGIT
-      NZA=NKCV*(2**NGIT-1)+2*NGIT
+  nxy=nx*ny
+  nxz=nx*nz
+  nyz=ny*nz
+  nxyz=nxy*nz
 
-      NXYA=NICV*NJCV*(4**NGIT-1)/3+2*(NXA+NYA-2*NGIT)
-      NXZA=NICV*NKCV*(4**NGIT-1)/3+2*(NXA+NZA-2*NGIT)
-      NYZA=NJCV*NKCV*(4**NGIT-1)/3+2*(NYA+NZA-2*NGIT)
+  nxa=nicv*(2**ngit-1)+2*ngit
+  nya=njcv*(2**ngit-1)+2*ngit
+  nza=nkcv*(2**ngit-1)+2*ngit
 
-      NXYZA=NICV*NJCV*NKCV*(8**NGIT-1)/7+ &
-      2*(4**NGIT-1)/3*(NICV*NJCV+NICV*NKCV+NJCV*NKCV)+ &
-      4*(NXA+NYA+NZA-4*NGIT)
+  nxya=nicv*njcv*(4**ngit-1)/3+2*(nxa+nya-2*ngit)
+  nxza=nicv*nkcv*(4**ngit-1)/3+2*(nxa+nza-2*ngit)
+  nyza=njcv*nkcv*(4**ngit-1)/3+2*(nya+nza-2*ngit)
 
-      NXYZM=NXYZA-NXYZ+1
+  nxyza=nicv*njcv*nkcv*(8**ngit-1)/7+ &
+  2*(4**ngit-1)/3*(nicv*njcv+nicv*nkcv+njcv*nkcv)+ &
+  4*(nxa+nya+nza-4*ngit)
 
-      RETURN
-      END
+  nxyzm=nxyza-nxyz+1
+
+  return
+  end

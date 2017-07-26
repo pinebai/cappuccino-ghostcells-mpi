@@ -31,39 +31,71 @@
       real(prec), dimension(nxyza), intent(in) :: u
       real(prec), dimension(nxyza), intent(inout) :: dudx,dudy,dudz
 
-      integer :: i,j,k,inp,ine,inn,int,inw,ins,inb
-      real(prec) :: ue,uw,un,us,ut,ub,volr
+      integer :: i,j,k,inp,ine,inn,int
+      real(prec) :: ue,un,ut,volr
 
-      ! Inner cell loop
-      do k=3,nkmm
-      do i=3,nimm
-      do j=3,njmm
+      dudx = 0.0d0
+      dudy = 0.0d0
+      dudz = 0.0d0
+
+      ! Inner faces loop
+      do k=2,nkmm
+      do i=2,nimm
+      do j=2,njmm
 
       inp=lk(k)+li(i)+j
 
       ine=inp+nj
       inn=inp+1
       int=inp+nij
-      inw=inp-nj
-      ins=inp-1
-      inb=inp-nij
+
+
+      ue = u(ine)*fx(inp)+u(inp)*(1.0d0-fx(inp))
+      un = u(inn)*fy(inp)+u(inp)*(1.0d0-fy(inp))
+      ut = u(int)*fz(inp)+u(inp)*(1.0d0-fz(inp))
+
+      dudx(inp) = dudx(inp) + (ue*ar1x(inp)+un*ar2x(inp)+ut*ar3x(inp) )
+
+      dudx(ine) = dudx(ine) - ( ue*ar1x(inp) )
+
+      dudx(inn) = dudx(inn) - ( un*ar2x(inp) )
+
+      dudx(int) = dudx(int) - ( ut*ar3x(inp) )
+
+ 
+      dudy(inp) = dudy(inp) + ( ue*ar1y(inp)+un*ar2y(inp)+ut*ar3y(inp) )
+
+      dudy(ine) = dudy(ine) - ( ue*ar1y(inp) )
+
+      dudy(inn) = dudy(inn) - ( un*ar2y(inp) )
+
+      dudy(int) = dudy(int) - ( ut*ar3y(inp) )
+
+
+      dudz(inp) = dudz(inp) + ( ue*ar1z(inp)+un*ar2z(inp)+ut*ar3z(inp) )
+ 
+      dudz(ine) = dudz(ine) - ( ue*ar1z(inp) )
+
+      dudz(inn) = dudz(inn) - ( un*ar2z(inp) )
+
+      dudz(int) = dudz(int) - ( ut*ar3z(inp) )
+
+      end do
+      end do 
+      end do 
+
+      ! Inner cells loop
+      do k=3,nkmm
+      do i=3,nimm
+      do j=3,njmm
+
+      inp=lk(k)+li(i)+j
 
       volr = 1.0d0/vol(inp)
 
-      ue = u(ine)*fx(inp)+u(inp)*(1.0d0-fx(inp))
-      uw = u(inp)*fx(inw)+u(inw)*(1.0d0-fx(inw))
-      un = u(inn)*fy(inp)+u(inp)*(1.0d0-fy(inp))
-      us = u(inp)*fy(ins)+u(ins)*(1.0d0-fy(ins))
-      ut = u(int)*fz(inp)+u(inp)*(1.0d0-fz(inp))
-      ub = u(inp)*fz(inb)+u(inb)*(1.0d0-fz(inb))
-
-
-      dudx(inp) = (ue*ar1x(inp)+un*ar2x(inp)+ut*ar3x(inp) &
-                  -uw*ar1x(inw)-us*ar2x(ins)-ub*ar3x(inb))*volr
-      dudy(inp) = (ue*ar1y(inp)+un*ar2y(inp)+ut*ar3y(inp) &
-                  -uw*ar1y(inw)-us*ar2y(ins)-ub*ar3y(inb))*volr
-      dudz(inp) = (ue*ar1z(inp)+un*ar2z(inp)+ut*ar3z(inp) &
-                  -uw*ar1z(inw)-us*ar2z(ins)-ub*ar3z(inb))*volr
+      dudx(inp) = dudx(inp)*volr
+      dudy(inp) = dudy(inp)*volr
+      dudz(inp) = dudz(inp)*volr
 
       end do
       end do 

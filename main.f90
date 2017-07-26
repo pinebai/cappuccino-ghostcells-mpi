@@ -22,7 +22,8 @@ program cappuccino_ghostcells_mpi
   use buoy
   use time_mod
   use gradients
-  use fieldManipulation ! Volume Weighted Average function
+  use fieldManipulation
+  use utils
 
   implicit none
 
@@ -86,25 +87,23 @@ program cappuccino_ghostcells_mpi
     ! Print cappuccino logo to log file.
     call show_logo
 
-    ! Print timestamp to log file.
-    call timestamp
-
   endif
 
 
   ! Read input file
   call read_input
 
+  ! Read grid file
+  call read_grid
+
+
       CALL MPI_BARRIER(MPI_COMM_WORLD,IERR)
       ierr = 1
       CALL MPI_FINALIZE(ierr)
       STOP
 
-  ! Read grid file
-  call read_grid
-
   ! Initialisation
-  call modinp
+  call init
 
   ! Open files for data at monitoring points 
   if(ltransient) then

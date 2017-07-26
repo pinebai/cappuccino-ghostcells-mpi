@@ -17,7 +17,6 @@ module parameters
   use types
 
   integer, parameter :: nphi=10  ! number of varibales to solve-fields
-  integer, parameter :: ngit=1   ! for multigrid-how many grid levels
   integer, parameter :: iobst=0
   integer, parameter :: nobst=1
   integer, parameter :: nxo=1
@@ -58,21 +57,19 @@ module indexes
 
     integer :: ni,nj,nk,nim,njm,nkm,nij,nik,njk,nijk, &
                ijs,iks,jks,ijks,icst,icen,&
-               nig,njg,nkg,nimg,njmg,nkmg,nijg,nikg,njkg,nijkg,&
-               ijsg,iksg,jksg,ijksg,icstg,iceng,&
                kgrid,iter,iterf,&
                imon,jmon,kmon,mpoints, &
-               ijkmon,iim,jjm,kkm,ipr,jpr,kpr,ijkpr,idir
+               ijkmon,ipr,jpr,kpr,ijkpr,idir
     integer :: nimm,njmm,nkmm
 
    integer, dimension(:), allocatable :: lig, li
    integer, dimension(:), allocatable :: lkg, lk
 
-   ! parameters related to multigrid procedure:
-   integer, dimension(ngit) :: nigit,njgit,nkgit,&
-                               ijkgit,&
-                               isbij,isbik,isbjk,&
-                               lsg,lsr,lsi,mit
+   ! ! parameters related to multigrid procedure:
+   ! integer, dimension(ngit) :: nigit,njgit,nkgit,&
+   !                             ijkgit,&
+   !                             isbij,isbik,isbjk,&
+   !                             lsg,lsr,lsi,mit
 
    ! those with nphi are related to each field that we calculate u,v,w,p,t,kin,dis...:
    integer, dimension(nphi) :: nsw
@@ -90,11 +87,11 @@ module indexes
    real(prec), dimension(:), allocatable ::  bnuselt1,bnuselt2 ! dimension(nx*ny)
 
    integer :: iconvective_scheme
+
    logical :: lcds,lluds,lquds,lsmart,lavl,lmuscl,lumist,lgamma,lcds4
     
    integer :: iturbmodel ! Integer identifying turbulence model
 
-   ! LOGICALS (yes/no) , MOSTLY READ FROM SIMULATION-INPUT FILE:
    logical :: lturb,lread,lwrite,ltest,louts,loute, &  ! turbulent simulation, read restart file, write restart file, print residual of the linear solver,.,..      
               lsor,lsol,ltransient, &             ! LTRANSIENT is TRUE for transient (non-stationary) simulations              
               levm,lasm,lles,ldes,lsgdh,lggdh,lafm, &  ! eddy-viscosity, algebraic stress model or LES, simple gradient or generalized gradient hypothesis, algerbaic flux model

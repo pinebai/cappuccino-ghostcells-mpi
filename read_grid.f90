@@ -12,73 +12,172 @@ subroutine read_grid
   use buoy
   use time_mod
   use printing
+  use utils
 
   implicit none
 
-  include 'mpif.h'
+  ! include 'mpif.h'
 
   integer :: ik,jk,ij,ijk
-
- ! NOTE: nproc_char - nproc zapisan levo u vidu stringa!!!1
-
-  open(unit=4,file=adjustl(trim(grid_file))//nproc_char,form='unformatted')
-  rewind 4
-
-  read(4)  ni,nj,nk
-
-  !.....stop reading file for a second...
-  !.....set parameters                                                   
-  call set_parameters
-  !.....allocate arrays                                                  
-  call allocate_arrays                                             
-  !.....end:setting parameters and allocating arrays.....................
+  integer :: grid_unit
+  character( len = 5) :: nproc_char 
 
 
-  read(4)  nij,nik,njk,nijk,ijs,iks,jks,ijks, &
-          (lbw(jk),jk=jks+1,jks+njk),(lbe(jk),jk=jks+1,jks+njk), &
-          (lbs(ik),ik=iks+1,iks+nik),(lbn(ik),ik=iks+1,iks+nik), &
-          (lbb(ij),ij=ijs+1,ijs+nij),(lbt(ij),ij=ijs+1,ijs+nij), &
-          low,loe,los,lon,lob,lot,lout,lthermbc,lconbc
-  read(4) (x(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (y(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (z(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (xc(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (yc(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (zc(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (vol(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (fx(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (fy(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (fz(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar1x(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar1y(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar1z(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar2x(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar2y(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar2z(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar3x(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar3y(ijk),ijk=ijks+1,ijks+nijk)
-  read(4) (ar3z(ijk),ijk=ijks+1,ijks+nijk)
 
-  !----------------------------------------------------
-  !     [thermal-bc informations: ]
-  !----------------------------------------------------
-  if(lthermbc.eq.1) then
-  read(4)(lbwt(jk),jk=jks+1,jks+njk),(lbet(jk),jk=jks+1,jks+njk), &
-         (lbst(ik),ik=iks+1,iks+nik),(lbnt(ik),ik=iks+1,iks+nik), &
-         (lbbt(ij),ij=ijs+1,ijs+nij),(lbtt(ij),ij=ijs+1,ijs+nij)
-  read(4) twest,teast,tsouth,tnorth,tbottom,ttop
-  read(4) qflxwest,qflxeast,qflxsouth,qflxnorth,qflxbottom,qflxtop
-  end if
+  ! NOTE: nproc_char <- this (=myid + 1) zapisan levo u vidu stringa.
+  call i4_to_s_left ( this, nproc_char )
+  print*, 'Opening grid file: ',adjustl(trim(grid_file))//'-'//trim(nproc_char)
 
-  !----------------------------------------------------
-  !     [concentration-bc informations: ]
-  !----------------------------------------------------
-  if(lconbc.eq.1) then
-  read(4)(lbwc(jk),jk=jks+1,jks+njk),(lbec(jk),jk=jks+1,jks+njk), &
-         (lbsc(ik),ik=iks+1,iks+nik),(lbnc(ik),ik=iks+1,iks+nik), &
-         (lbbc(ij),ij=ijs+1,ijs+nij),(lbtc(ij),ij=ijs+1,ijs+nij)
-  read(4) conwest,coneast,consouth,connorth,conbottom,contop
-  end if
+  call get_unit ( grid_unit )
+
+  open(unit=grid_unit,file=adjustl(trim(grid_file))//'-'//trim(nproc_char),form='unformatted')
+  rewind grid_unit
+
+  ! read( grid_unit ) &
+  !       ni,nj,nk,nijk, &
+  !       ninl,nout,nsym,npru,nwal,noc, &
+  !       nwali,nwala,nwalf
+
+! !-----------------------------------------------------------------------
+! ! stop reading file for a second and do some useful work
+! !-----------------------------------------------------------------------
+! call set_parameters                                              
+! call allocate_arrays                                             
+! !-----------------------------------------------------------------------
+
+
+!   ! read( grid_unit ) &
+!   !       (li(i),i=1,ni),(lk(k),k=1,nk)
+
+!   if(ninl.gt.0) then     
+!   read( grid_unit ) &
+!         (iji(i)  ,i=1,ninl),(ijpi(i) ,i=1,ninl), &
+!         (xni(i),i=1,ninl),(yni(i),i=1,ninl),(zni(i),i=1,ninl), &
+!         (xfi(i),i=1,ninl),(yfi(i),i=1,ninl),(zfi(i),i=1,ninl)
+!   endif
+
+!   if(nout.gt.0) then 
+!   read( grid_unit ) &
+!         (ijo(i)  ,i=1,nout),(ijpo(i) ,i=1,nout), &
+!         (xno(i),i=1,nout),(yno(i),i=1,nout),(zno(i),i=1,nout), &
+!         (xfo(i),i=1,nout),(yfo(i),i=1,nout),(zfo(i),i=1,nout)
+!   endif
+
+!   if(nwal.gt.0) then 
+!   read( grid_unit ) &
+!         (ijw(i)  ,i=1,nwal),(ijpw(i) ,i=1,nwal), &
+!         (srdw(i),i=1,nwal),(dnw(i),i=1,nwal), &
+!         (xnw(i),i=1,nwal),(ynw(i),i=1,nwal),(znw(i),i=1,nwal), &
+!         (xfw(i),i=1,nwal),(yfw(i),i=1,nwal),(zfw(i),i=1,nwal)
+!   endif
+
+!   if(nsym.gt.0) then 
+!   read( grid_unit ) &
+!         (ijs(i)  ,i=1,nsym),(ijps(i) ,i=1,nsym), &
+!         (srds(i),i=1,nsym),(dns(i),i=1,nsym), &
+!         (xns(i),i=1,nsym),(yns(i),i=1,nsym),(zns(i),i=1,nsym), &
+!         (xfs(i),i=1,nsym),(yfs(i),i=1,nsym),(zfs(i),i=1,nsym)
+!   endif
+
+!   if(npru.gt.0) then 
+!   read( grid_unit ) &                    
+!         (iju(i)  ,i=1,npru),(ijpu(i) ,i=1,npru), &
+!         (xnpr(i),i=1,npru),(ynpr(i),i=1,npru),(znpr(i),i=1,npru), &
+!         (xfpr(i),i=1,npru),(yfpr(i),i=1,npru),(zfpr(i),i=1,npru)
+!   endif
+
+!   if(noc.gt.0) then 
+!   read( grid_unit ) &
+!         (ijl(i)  ,i=1,noc),(ijr(i)  ,i=1,noc), &
+!         (srdoc(i), i=1,noc),(foc(i), i=1,noc), &
+!         (xnoc(i),i=1,noc),(ynoc(i),i=1,noc),(znoc(i),i=1,noc), &
+!         (xfoc(i),i=1,noc),(yfoc(i),i=1,noc),(zfoc(i),i=1,noc)
+!   endif
+
+!   read( grid_unit ) &
+! !
+! !           cell data-cell centers and volumes
+! !
+!         (xc(i) ,i=1,nijk),(yc(i) ,i=1,nijk),(zc(i) ,i=1,nijk), &
+!         (vol(i),i=1,nijk), &
+! !
+! !             interpolation factors in three directions
+! !
+!         (fx(i) ,i=1,nijk),(fy(i) ,i=1,nijk),(fz(i) ,i=1,nijk), &
+! !
+! !             face normal vector - its components are face area projections
+! !
+!         (ar1x(i),i=1,nijk),(ar1y(i),i=1,nijk),(ar1z(i),i=1,nijk), &
+!         (ar2x(i),i=1,nijk),(ar2y(i),i=1,nijk),(ar2z(i),i=1,nijk), &
+!         (ar3x(i),i=1,nijk),(ar3y(i),i=1,nijk),(ar3z(i),i=1,nijk), &
+! !
+! !             face centers for inner faces
+! !
+!         (xf1(i),i=1,nijk),(yf1(i),i=1,nijk),(zf1(i),i=1,nijk), &
+!         (xf2(i),i=1,nijk),(yf2(i),i=1,nijk),(zf2(i),i=1,nijk), &
+!         (xf3(i),i=1,nijk),(yf3(i),i=1,nijk),(zf3(i),i=1,nijk)
+
+! !.....Close mesh file
+!   close (4)
+
+
+
+  read( grid_unit )  ni,nj,nk
+
+!-----------------------------------------------------------------------
+! stop reading file for a second and do some useful work
+!-----------------------------------------------------------------------
+call set_parameters                                              
+call allocate_arrays                                             
+!-----------------------------------------------------------------------
+
+
+  read( grid_unit )  nij,nik,njk,nijk,ijs,iks,jks,ijks, &
+    (lbw(jk),jk=1,njk),(lbe(jk),jk=1,njk), &
+    (lbs(ik),ik=1,nik),(lbn(ik),ik=1,nik), &
+    (lbb(ij),ij=1,nij),(lbt(ij),ij=1,nij), &
+    low,loe,los,lon,lob,lot,lout,lthermbc,lconbc
+
+  read( grid_unit ) (x(ijk),ijk=1,nijk)
+  read( grid_unit ) (y(ijk),ijk=1,nijk)
+  read( grid_unit ) (z(ijk),ijk=1,nijk)
+  read( grid_unit ) (xc(ijk),ijk=1,nijk)
+  read( grid_unit ) (yc(ijk),ijk=1,nijk)
+  read( grid_unit ) (zc(ijk),ijk=1,nijk)
+  read( grid_unit ) (vol(ijk),ijk=1,nijk)
+  read( grid_unit ) (fx(ijk),ijk=1,nijk)
+  read( grid_unit ) (fy(ijk),ijk=1,nijk)
+  read( grid_unit ) (fz(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar1x(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar1y(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar1z(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar2x(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar2y(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar2z(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar3x(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar3y(ijk),ijk=1,nijk)
+  read( grid_unit ) (ar3z(ijk),ijk=1,nijk)
+
+  ! !----------------------------------------------------
+  ! !     [thermal-bc informations: ]
+  ! !----------------------------------------------------
+  ! if(lthermbc.eq.1) then
+  ! read( grid_unit )(lbwt(jk),jk=1,njk),(lbet(jk),jk=1,njk), &
+  !        (lbst(ik),ik=1,nik),(lbnt(ik),ik=1,nik), &
+  !        (lbbt(ij),ij=1,nij),(lbtt(ij),ij=1,nij)
+  ! read( grid_unit ) twest,teast,tsouth,tnorth,tbottom,ttop
+  ! read( grid_unit ) qflxwest,qflxeast,qflxsouth,qflxnorth,qflxbottom,qflxtop
+  ! end if
+
+  ! !----------------------------------------------------
+  ! !     [concentration-bc informations: ]
+  ! !----------------------------------------------------
+  ! if(lconbc.eq.1) then
+  ! read( grid_unit )(lbwc(jk),jk=1,njk),(lbec(jk),jk=1,njk), &
+  !        (lbsc(ik),ik=1,nik),(lbnc(ik),ik=1,nik), &
+  !        (lbbc(ij),ij=1,nij),(lbtc(ij),ij=1,nij)
+  ! read( grid_unit ) conwest,coneast,consouth,connorth,conbottom,contop
+  ! end if
 
   ! !----------------------------------------------------
   ! !     [obstacle informations: ]
@@ -87,7 +186,7 @@ subroutine read_grid
   ! !    [velocity: ]
   ! !----------------------------------------------------
   ! if(iobst.eq.1) then
-  ! read(4) ios,ioe,jos,joe,kos,koe, &
+  ! read( grid_unit ) ios,ioe,jos,joe,kos,koe, &
   !         dnow,dnoe,dnos,dnon,dnob,dnot, &
   !         typobw,typobe,typobs,typobn, &
   !         typobb,typobt
@@ -96,7 +195,7 @@ subroutine read_grid
   ! !    [thermal: ]
   ! !----------------------------------------------------
   ! if(iobst.eq.1.and.lthermbc.eq.1) then
-  ! read(4) typobtw,typobte,typobts,typobtn, &
+  ! read( grid_unit ) typobtw,typobte,typobts,typobtn, &
   !         typobtb,typobtt, &
   !         tobwest,tobeast,tobsouth,tobnorth, &
   !         tobbottom,tobtop
@@ -105,18 +204,18 @@ subroutine read_grid
   ! !    [concentration: ]
   ! !----------------------------------------------------
   ! if(iobst.eq.1.and.lconbc.eq.1) then
-  ! read(4) typobcw,typobce,typobcs,typobcn, &
+  ! read( grid_unit ) typobcw,typobce,typobcs,typobcn, &
   !         typobcb,typobct, &
   !         cobwest,cobeast,cobsouth,cobnorth, &
   !         cobbottom,cobtop
   ! end if
   ! !----------------------------------------------------
 
-  close (4)
+  close ( grid_unit )
 
-  ! set control parameters
-  call setcon
+  ! Set grid loop parameters
+  call setind
 
-
+print*,'Here',myid
 
 end subroutine read_grid
