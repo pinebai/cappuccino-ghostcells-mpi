@@ -24,6 +24,8 @@ subroutine print_header
   write(66,'(50x,a,1pe10.4)')   'dynamic viscosity:  vis = ',viscos
   write(66,'(50x,a,0pf4.2)')    'alfa  parameter  : alfa = ',alfa
   write(66,'(50x,a,1pe10.4)')   'conv. criterion  :  sor = ',sormax
+  write(66,'(50x,a,1pe10.4)')   '                  small = ',small
+  write(66,'(50x,a,1pe10.4)')   '                  great = ',great
 
   if(lcal(iu))   write(66,'(/,50x,a,f5.2,a,f5.2,a,i3)') 'urf( u )=',urf(iu), '  gds( u )=',gds(iu), '  nsw=', nsw(iu)
   if(lcal(iv))   write(66,'(50x,a,f5.2,a,f5.2,a,i3)')   'urf( v )=',urf(iv), '  gds( v )=',gds(iu), '  nsw=', nsw(iv)
